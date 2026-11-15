@@ -1,26 +1,25 @@
-# Pocket Ledger
+# Anju-jha
 
-A small, responsive expense tracker that runs in your browser. Add an expense, choose a category, and see monthly, weekly, and lifetime totals at a glance.
+A home for small, browser-based tools.
 
-## Features
+## Projects
 
-- Add and delete expenses
-- Categorize entries and filter the list
-- View spending totals for this month, this week, and all time
-- Store entries in browser local storage; no account or server required
-- Responsive layout for desktop and mobile
+### Resume Builder
+Fill in your contact details, profile, skills, work experience, and education. The page creates a clean, single-column resume preview that you can print or save as a PDF.
 
-## Run it
+- [Open the resume builder source](resume-builder.html)
+- Your details stay in the current browser page; the app does not upload or save them.
+- Use the **Print / Save as PDF** button after filling in your details.
 
-Open [index.html](index.html) in a modern browser. No install or build step is needed.
+### Pocket Ledger
+A responsive expense tracker with category filters and weekly, monthly, and lifetime totals.
 
-## Data and privacy
+- [Open Pocket Ledger](index.html)
+- Expenses are saved in this browser's local storage and are not sent to a server.
 
-Expenses are saved in local storage in the browser where you opened the app. They are not sent to a server. Clearing that browser's site data removes the saved entries, and entries do not automatically sync between devices.
+## Run a project
 
-## Currency
-
-The display uses Indian rupees (INR). To use another currency, change the `currency` option in the `money()` function in `index.html`.
+Download its HTML file and open it in a modern browser. No install or build step is needed.
 
 ## License
 
