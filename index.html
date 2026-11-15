@@ -52,7 +52,7 @@
     .delete { border:0; padding:6px 8px; border-radius:8px; color:#9c5140; background:transparent; }
     .delete:hover { background:#f8e9e3; }
     .empty { padding:34px 12px; text-align:center; color:var(--muted); }
-    .footer { margin-top:18px; text-align:center; color:var(--muted); font-size:12px; }
+    .footer { margin-top:18px; text-align:center; color:var(--muted); font-size:12px; }\n    .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
     @media (max-width:760px) { .shell{width:min(100% - 28px,560px);padding-top:24px}.summary{grid-template-columns:1fr}.stat{padding:16px 18px}.stat-value{font-size:23px}.layout{grid-template-columns:1fr}header{margin-bottom:28px}.privacy{max-width:150px;text-align:right} }
     @media (max-width:460px) { th:nth-child(2),td:nth-child(2){display:none}.panel{padding:17px}.toolbar{align-items:flex-start;flex-direction:column}.toolbar select{width:100%} }
   </style>
@@ -128,7 +128,7 @@
       const weekStart = startOfWeek(now);
       const totalFor = items => items.reduce((sum, item) => sum + Number(item.amount), 0);
       document.querySelector("#month-total").textContent = money(totalFor(expenses.filter(item => item.date.startsWith(monthKey))));
-      document.querySelector("#week-total").textContent = money(totalFor(expenses.filter(item => new Date(item.date + "T00:00:00") >= weekStart)));
+      document.querySelector("#week-total").textContent = money(totalFor(expenses.filter(item => { const date = new Date(item.date + "T00:00:00"); return date >= weekStart && date < weekEnd; })));
       document.querySelector("#all-total").textContent = money(totalFor(expenses));
       const visible = expenses.filter(item => filter.value === "all" || item.category === filter.value).sort((a,b) => b.date.localeCompare(a.date));
       list.replaceChildren();
