@@ -105,7 +105,7 @@
             <div class="field"><label for="phone">Phone</label><input id="phone" data-profile="phone" type="tel" placeholder="+91 98765 43210" autocomplete="tel"></div>
             <div class="field"><label for="location">City, Country</label><input id="location" data-profile="location" placeholder="e.g. Jaipur, India" autocomplete="address-level2"></div>
             <div class="field"><label for="linkedin">LinkedIn URL</label><input id="linkedin" data-profile="linkedin" type="url" placeholder="https://linkedin.com/in/yourname"></div>
-            <div class="field full"><label for="summary">Professional summary</label><textarea id="summary" data-profile="summary" maxlength="900" placeholder="In 2–4 sentences, describe your experience, strengths, and the value you bring to the role."></textarea></div>
+            <div class="field full"><label for="summary">Professional summary</label><textarea id="summary" data-profile="summary" maxlength="900" placeholder="In 2–4 sentences, describe your experience, strengths, and the value you bring to the role."></textarea><div class="ai-row"><button class="subtle" id="make-ai-prompt" type="button">Prepare AI summary prompt</button><button class="subtle" id="copy-ai-prompt" type="button" hidden>Copy prompt</button><a href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">Open ChatGPT ↗</a></div><textarea class="ai-prompt" id="ai-prompt" aria-label="AI summary prompt" placeholder="Your custom prompt will appear here." hidden readonly></textarea><p class="ai-note" id="ai-note" hidden>Copy this prompt into ChatGPT, then paste its summary into the Professional summary box. Your details are only shared if you choose to send the prompt.</p></div>
             <div class="field full"><label for="skills">Skills</label><input id="skills" data-profile="skills" placeholder="e.g. Customer service, Excel, Communication"></div>
           </div>
         </section>
@@ -242,6 +242,42 @@
       const hasContent = Boolean(values.summary || contact.length || values.role || skills.length || experience.length || education.length);
       document.querySelector("#empty-note").hidden = hasContent || !hasName;
     }
+    document.querySelector("#make-ai-prompt").addEventListener("click", () => {
+      const values = Object.fromEntries(profileFields.map(field => [field.dataset.profile, field.value.trim()]));
+      const experience = readEntries("experience").filter(item => Object.values(item).some(Boolean));
+      const role = values.role || "the role I am applying for";
+      const experienceText = experience.map(item =>
+        [item.title, item.company, item.location, item.dates, item.highlights]
+          .filter(Boolean).join(" | ")
+      ).join("\\n") || "No work experience details provided. Focus only on the skills and information below.";
+      const prompt = [
+        "Write a concise, professional resume summary for a job application.",
+        "Target role: " + role,
+        "Skills: " + (values.skills || "Not provided"),
+        "Experience details:",
+        experienceText,
+        "Existing profile notes: " + (values.summary || "None"),
+        "Use 2–3 sentences, clear language, and relevant keywords. Do not invent employers, dates, qualifications, achievements, numbers, or skills. If the information is too limited, keep the summary general and factual. Return only the summary."
+      ].join("\\n");
+      const box = document.querySelector("#ai-prompt");
+      box.value = prompt;
+      box.hidden = false;
+      document.querySelector("#copy-ai-prompt").hidden = false;
+      document.querySelector("#ai-note").hidden = false;
+      box.focus();
+      box.select();
+    });
+    document.querySelector("#copy-ai-prompt").addEventListener("click", async event => {
+      const box = document.querySelector("#ai-prompt");
+      try {
+        await navigator.clipboard.writeText(box.value);
+        event.currentTarget.textContent = "Copied";
+      } catch {
+        box.focus();
+        box.select();
+        event.currentTarget.textContent = "Select and copy prompt";
+      }
+    });
     profileFields.forEach(field => field.addEventListener("input", render));
     document.querySelectorAll("[data-add]").forEach(button => button.addEventListener("click", () => addEntry(button.dataset.add)));
     render();
