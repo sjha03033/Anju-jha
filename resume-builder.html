@@ -215,7 +215,7 @@
     }
     function render() {
       const values = Object.fromEntries(profileFields.map(field => [field.dataset.profile, field.value.trim()]));
-      const hasName = setText("#out-name", values.name, "Your Name");
+      setText("#out-name", values.name, "Your Name");
       const role = document.querySelector("#out-role");
       role.textContent = values.role;
       role.hidden = !values.role;
